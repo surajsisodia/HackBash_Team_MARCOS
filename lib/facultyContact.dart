@@ -156,7 +156,7 @@ class FacultyContact extends StatelessWidget {
                 children: [
                   contactTile('Director'),
                   sh(20),
-                  contactTile('Gopal Aggarwal'),
+                  contactTile('Office'),
                 ],
               ),
             ),

@@ -170,22 +170,27 @@ class _ECommerceState extends State<ECommerce> {
                           padding: EdgeInsets.zero,
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              child: Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal:
-                                        SizeConfig.screenWidth / 375 * 7),
-                                width: SizeConfig.screenWidth / 375 * 152,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffc4c4c4),
-                                  borderRadius: BorderRadius.circular(
-                                      SizeConfig.screenWidth / 375 * 10),
+                            if (snapshot.hasData) {
+                              return InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal:
+                                          SizeConfig.screenWidth / 375 * 7),
+                                  width: SizeConfig.screenWidth / 375 * 152,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffc4c4c4),
+                                    borderRadius: BorderRadius.circular(
+                                        SizeConfig.screenWidth / 375 * 10),
+                                  ),
+                                  child: Image(
+                                      image: NetworkImage(
+                                          snapshot.data.docs[index]['image1'])),
                                 ),
-                                child: Image(
-                                    image: NetworkImage(
-                                        snapshot.data.docs[index]['image1'])),
-                              ),
-                            );
+                              );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
                           },
                         ),
                       );
@@ -197,7 +202,47 @@ class _ECommerceState extends State<ECommerce> {
                     style: txtS(Colors.white, 18, FontWeight.w300),
                   ),
                   sh(20),
-                  //cont(null, "cycle"),
+                  // StreamBuilder(
+                  //   stream: FirebaseFirestore.instance
+                  //       .collection('eCommerceProduct')
+                  //       .where('itemCategry', isEqualTo: 'Cycle')
+                  //       .snapshots(),
+                  //   builder: (context, snapshot) {
+                  //     return Container(
+                  //       width: SizeConfig.screenWidth / 375 * 375,
+                  //       height: SizeConfig.screenHeight / 812 * 95,
+                  //       child: ListView.builder(
+                  //         shrinkWrap: true,
+                  //         scrollDirection: Axis.horizontal,
+                  //         physics: BouncingScrollPhysics(),
+                  //         padding: EdgeInsets.zero,
+                  //         itemCount: snapshot.data.docs.length,
+                  //         itemBuilder: (BuildContext context, int index) {
+                  //           if (snapshot.hasData) {
+                  //             return InkWell(
+                  //               child: Container(
+                  //                 margin: EdgeInsets.symmetric(
+                  //                     horizontal:
+                  //                         SizeConfig.screenWidth / 375 * 7),
+                  //                 width: SizeConfig.screenWidth / 375 * 152,
+                  //                 decoration: BoxDecoration(
+                  //                   color: Color(0xffc4c4c4),
+                  //                   borderRadius: BorderRadius.circular(
+                  //                       SizeConfig.screenWidth / 375 * 10),
+                  //                 ),
+                  //                 child: Image(
+                  //                     image: NetworkImage(
+                  //                         snapshot.data.docs[index]['image1'])),
+                  //               ),
+                  //             );
+                  //           } else {
+                  //             return CircularProgressIndicator();
+                  //           }
+                  //         },
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                   sh(20),
                   Text(
                     "Books",
