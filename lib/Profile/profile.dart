@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:toast/toast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../drawer.dart';
 
@@ -28,6 +30,7 @@ class _ProfileState extends State<Profile> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
+  SharedPreferences preferences;
 
   Future<String> uploadDisplayImageToFireStorage(
       File file, String fileName) async {
@@ -36,6 +39,11 @@ class _ProfileState extends State<Profile> {
     final taskSnapshot = await uploadTask.whenComplete(() => null);
     String url = await taskSnapshot.ref.getDownloadURL();
     return url;
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -76,148 +84,167 @@ class _ProfileState extends State<Profile> {
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Container();
-              }
-              var doc = snapshot.data.docs[0];
-              var data = doc.data();
-              return Stack(
-                children: [
-                  Positioned(
-                    bottom: h * 0,
-                    child: Container(
-                      height: h * 550,
-                      width: b * 375,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(b * 75),
-                          topRight: Radius.circular(b * 75),
-                        ),
-                      ),
-                      child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(horizontal: b * 20),
-                        children: [
-                          sh(80),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: b * 15, vertical: h * 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ico(Icons.person_outline),
-                                SizedBox(width: b * 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      !isName ? 'Name' : 'Change Name',
-                                      style: txtS(isName ? bc : pc, 14,
-                                          FontWeight.w500),
-                                    ),
-                                    sh(3),
-                                    isName
-                                        ? Container(
-                                            width: b * 225,
-                                            child: TextField(
-                                              onChanged: (val) {
-                                                name = val.trim();
-                                              },
-                                              keyboardType: TextInputType.name,
-                                              style: txtS(textColor, 15,
-                                                  FontWeight.w500),
-                                              decoration:
-                                                  dec('Enter Your Name'),
-                                            ),
-                                          )
-                                        : Text(
-                                            (!snapshot.hasData ||
-                                                    data['name'] == null)
-                                                ? ''
-                                                : data['name'],
-                                            style: txtS(
-                                                textColor, 16, FontWeight.w400),
-                                          ),
-                                    isName
-                                        ? butt(() async {
-                                            if (name != null && name != '') {
-                                              await doc.reference
-                                                  .update({'name': name});
-                                            }
-                                            isName = !isName;
-                                            setState(() {});
-                                          })
-                                        : SizedBox(),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isName = !isName;
-                                        });
-                                      },
-                                      child: ediB(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+              } else {
+                var doc = snapshot.data.docs[0];
+                var data = doc.data();
+                return Stack(
+                  children: [
+                    Positioned(
+                      bottom: h * 0,
+                      child: Container(
+                        height: h * 550,
+                        width: b * 375,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(b * 75),
+                            topRight: Radius.circular(b * 75),
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: b * 17, vertical: h * 11),
-                            width: b * 335,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.phone_outlined,
-                                  color: bc,
-                                  size: b * 18,
-                                ),
-                                SizedBox(width: b * 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      isPhone ? 'Change Number' : 'Number',
-                                      style: txtS(isPhone ? bc : pc, 14,
-                                          FontWeight.w500),
-                                    ),
-                                    sh(3),
-                                    isPhone
-                                        ? Container(
-                                            width: b * 225,
-                                            child: TextField(
-                                              onChanged: (val) {
-                                                phone = val.trim();
-                                              },
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              style: txtS(textColor, 15,
-                                                  FontWeight.w500),
-                                              decoration: dec('Phone Number'),
+                        ),
+                        child: ListView(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(horizontal: b * 20),
+                          children: [
+                            sh(80),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: b * 15, vertical: h * 10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ico(Icons.person_outline),
+                                  SizedBox(width: b * 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        !isName ? 'Name' : 'Change Name',
+                                        style: txtS(isName ? bc : pc, 14,
+                                            FontWeight.w500),
+                                      ),
+                                      sh(3),
+                                      isName
+                                          ? Container(
+                                              width: b * 225,
+                                              child: TextField(
+                                                onChanged: (val) {
+                                                  name = val.trim();
+                                                },
+                                                keyboardType:
+                                                    TextInputType.name,
+                                                style: txtS(textColor, 15,
+                                                    FontWeight.w500),
+                                                decoration:
+                                                    dec('Enter Your Name'),
+                                              ),
+                                            )
+                                          : Text(
+                                              (!snapshot.hasData ||
+                                                      data['name'] == null)
+                                                  ? data['uiNumber']
+                                                      .toString()
+                                                      .toUpperCase()
+                                                  : data['name'],
+                                              style: txtS(textColor, 16,
+                                                  FontWeight.w400),
                                             ),
-                                          )
-                                        : Text(
-                                            (!snapshot.hasData ||
-                                                    data['phone'] == null)
-                                                ? ''
-                                                : data['phone'],
-                                            style: txtS(
-                                                textColor, 16, FontWeight.w400),
-                                          ),
-                                    isPhone
-                                        ? butt(() async {
-                                            if (phone != null && phone != '') {
-                                              await doc.reference
-                                                  .update({'phone': phone});
-                                            }
+                                      isName
+                                          ? butt(() async {
+                                              if (name != null && name != '') {
+                                                await doc.reference
+                                                    .update({'name': name});
+                                              }
+                                              isName = !isName;
+                                              setState(() {});
+                                            })
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            isName = !isName;
+                                          });
+                                        },
+                                        child: ediB(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: b * 17, vertical: h * 11),
+                              width: b * 335,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.phone_outlined,
+                                    color: bc,
+                                    size: b * 18,
+                                  ),
+                                  SizedBox(width: b * 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        isPhone ? 'Change Number' : 'Number',
+                                        style: txtS(isPhone ? bc : pc, 14,
+                                            FontWeight.w500),
+                                      ),
+                                      sh(3),
+                                      isPhone
+                                          ? Container(
+                                              width: b * 225,
+                                              child: TextField(
+                                                onChanged: (val) {
+                                                  phone = val.trim();
+                                                },
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                style: txtS(textColor, 15,
+                                                    FontWeight.w500),
+                                                decoration: dec('Phone Number'),
+                                              ),
+                                            )
+                                          : Text(
+                                              (!snapshot.hasData ||
+                                                      data['phone'] == null)
+                                                  ? 'Not Provided'
+                                                  : data['phone'],
+                                              style: txtS(textColor, 16,
+                                                  FontWeight.w400),
+                                            ),
+                                      isPhone
+                                          ? butt(() async {
+                                              if (phone != null &&
+                                                  phone != '') {
+                                                await doc.reference
+                                                    .update({'phone': phone});
+                                              }
+                                              isPhone = !isPhone;
+                                              setState(() {});
+                                            })
+                                          : SizedBox(),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
                                             isPhone = !isPhone;
                                             setState(() {});
                                           })
@@ -347,13 +374,39 @@ class _ProfileState extends State<Profile> {
                                       color: pc,
                                       width: b * 1,
                                     ),
+
                                   ),
-                                  child: Text(
-                                    'Change Password',
-                                    textAlign: TextAlign.center,
-                                    style: txtS(bc, 16, FontWeight.w300),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: b * 15, vertical: h * 10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ico(Icons.engineering_outlined),
+                                  SizedBox(width: b * 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Enrollment Number',
+                                        style: txtS(pc, 14, FontWeight.w500),
+                                      ),
+                                      sh(6),
+                                      Text(
+                                        (!snapshot.hasData ||
+                                                data['uiNumber'] == null)
+                                            ? ''
+                                            : data['uiNumber'].toUpperCase(),
+                                        style: txtS(bc, 16, FontWeight.w400),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                ],
                               ),
                               Spacer(),
                               InkWell(
@@ -370,86 +423,170 @@ class _ProfileState extends State<Profile> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(b * 10),
                                     color: bc,
+
                                   ),
-                                  child: Row(
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: b * 15, vertical: h * 10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ico(Icons.school_outlined),
+                                  SizedBox(width: b * 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Icon(
-                                        Icons.logout,
-                                        color: Colors.white,
-                                        size: 16 * b,
-                                      ),
-                                      SizedBox(width: b * 17),
                                       Text(
-                                        'Log Out',
-                                        style: txtS(
-                                            Colors.white, 16, FontWeight.w400),
+                                        'Semester',
+                                        style: txtS(pc, 14, FontWeight.w500),
+                                      ),
+                                      sh(3),
+                                      Text(
+                                        (!snapshot.hasData ||
+                                                data['sem'] == null)
+                                            ? ''
+                                            : data['sem'] + 'th',
+                                        style: txtS(bc, 16, FontWeight.w400),
                                       ),
                                     ],
                                   ),
+                                ],
+                              ),
+                            ),
+                            sh(30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Login()),
+                                    );
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: b * 25),
+                                    height: h * 60,
+                                    width: b * 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(b * 10),
+                                      border: Border.all(
+                                        color: pc,
+                                        width: b * 1,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Change Password',
+                                      textAlign: TextAlign.center,
+                                      style: txtS(bc, 16, FontWeight.w300),
+                                    ),
+                                  ),
+                                ),
+                                Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    logOut();
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: b * 25),
+                                    height: h * 60,
+                                    width: b * 150,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(b * 10),
+                                      color: bc,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.logout,
+                                          color: Colors.white,
+                                          size: 16 * b,
+                                        ),
+                                        SizedBox(width: b * 17),
+                                        Text(
+                                          'Log Out',
+                                          style: txtS(Colors.white, 16,
+                                              FontWeight.w400),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: SizeConfig.screenWidth * 0.5 - b * 138 / 2,
+                      bottom: h * 482.5,
+                      child: Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          InkWell(
+                            onTap: () async {},
+                            child: CircleAvatar(
+                              radius: b * 138 / 2,
+                              backgroundColor: Colors.amber,
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: data['photoUrl'] == null
+                                    ? ''
+                                    : data['photoUrl'],
+                                fadeInDuration: Duration(microseconds: 0),
+                                fadeOutDuration: Duration(microseconds: 0),
+                                placeholder: (context, url) => Container(),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 0,
+                            child: InkWell(
+                              onTap: () async {
+                                final pickedFile = await ImagePicker()
+                                    .getImage(source: ImageSource.gallery);
+                                if (pickedFile != null) {
+                                  imageFile = File(pickedFile.path);
+                                  imageName = data['email'];
+                                  uploadDisplayImageToFireStorage(
+                                          imageFile, imageName)
+                                      .then((value) {
+                                    doc.reference.update({'photoUrl': value});
+                                  });
+                                } else {
+                                  return;
+                                }
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: pc,
+                                radius: SizeConfig.screenWidth * 20 / 375,
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: SizeConfig.screenWidth * 20 / 375,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Positioned(
-                    right: SizeConfig.screenWidth * 0.5 - b * 138 / 2,
-                    bottom: h * 482.5,
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        InkWell(
-                          onTap: () async {
-                            final pickedFile = await ImagePicker()
-                                .getImage(source: ImageSource.gallery);
-                            if (pickedFile != null) {
-                              imageFile = File(pickedFile.path);
-                              imageName = data['email'];
-                              uploadDisplayImageToFireStorage(
-                                      imageFile, imageName)
-                                  .then((value) {
-                                doc.reference.update({'photoUrl': value});
-                              });
-                            } else {
-                              return;
-                            }
-                          },
-                          child: CircleAvatar(
-                            radius: b * 138 / 2,
-                            backgroundColor: Colors.amber,
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: data['photoUrl'] == null
-                                  ? ''
-                                  : data['photoUrl'],
-                              fadeInDuration: Duration(microseconds: 0),
-                              fadeOutDuration: Duration(microseconds: 0),
-                              placeholder: (context, url) => Container(),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: InkWell(
-                            onTap: () {},
-                            child: CircleAvatar(
-                              backgroundColor: pc,
-                              radius: SizeConfig.screenWidth * 20 / 375,
-                              child: Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: SizeConfig.screenWidth * 20 / 375,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
+                  ],
+                );
+              }
             }),
       ),
     );
@@ -562,5 +699,27 @@ class _ProfileState extends State<Profile> {
 
   SizedBox sh(double h) {
     return SizedBox(height: SizeConfig.screenHeight * h / 812);
+  }
+
+  logOut() async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    try {
+      await firebaseAuth.signOut().then((value) {
+        preferences.clear();
+        print("Signed Out");
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) {
+          return Login();
+        }), (route) => false);
+      }).catchError((e) {
+        print(e);
+      });
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
   }
 }
