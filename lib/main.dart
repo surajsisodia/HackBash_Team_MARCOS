@@ -1,6 +1,11 @@
+import 'package:IIIT_Surat_Connect/facultyContact.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'authScreens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+=======
+>>>>>>> 1d0d7b2906dfa9cebd73bb0484f0c69e60691869
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: FacultyContact(),
     );
   }
 }
