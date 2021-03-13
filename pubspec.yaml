@@ -23,17 +23,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  carousel_slider: ^3.0.0
   cloud_firestore: any
   cupertino_icons: ^1.0.0
-  google_fonts: ^1.1.1
-  shared_preferences: ^0.5.12+4
-  cloud_firestore:
-  material_design_icons_flutter:
   firebase_auth: ^0.20.1
   firebase_core: ^0.7.0
-  toast:
-  carousel_slider:
-
+  firebase_storage: ^7.0.0
+  google_fonts: ^1.1.1
+  image_picker: ^0.6.7+17
+  material_design_icons_flutter: null
+  shared_preferences: ^0.5.12+4
+  toast: ^0.1.5
 
 dev_dependencies:
   flutter_test:

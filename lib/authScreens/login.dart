@@ -1,3 +1,5 @@
+import 'package:IIIT_Surat_Connect/homePage.dart';
+import 'package:IIIT_Surat_Connect/mainMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -257,6 +259,11 @@ class _LoginState extends State<Login> {
         preferences.setBool('isLoggedIn', true);
         getUserDataFromDb(credential.user.uid);
         preferences.setString('currentUserUID', credential.user.uid);
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) {
+          return Home();
+        }), (route) => false);
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
