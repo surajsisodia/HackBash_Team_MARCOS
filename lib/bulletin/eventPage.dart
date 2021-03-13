@@ -1,9 +1,14 @@
-import 'package:IIIT_Surat_Connect/Utils/constants.dart';
-import 'package:IIIT_Surat_Connect/aboutUs.dart';
-import 'package:flutter/material.dart';
 import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
+import 'package:IIIT_Surat_Connect/Utils/constants.dart';
+import 'package:IIIT_Surat_Connect/drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EventPage extends StatelessWidget {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -12,6 +17,7 @@ class EventPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: bc,
+        drawer: DrawerCode(),
         appBar: AppBar(
           elevation: 0,
           backgroundColor: bc,
@@ -21,9 +27,9 @@ class EventPage extends StatelessWidget {
                 Scaffold.of(context).openDrawer();
               },
               child: Icon(
-                Icons.arrow_back_ios,
+                MdiIcons.sortVariant,
                 color: pc,
-                size: b * 20,
+                size: b * 24,
               ),
             );
           }),
@@ -38,17 +44,40 @@ class EventPage extends StatelessWidget {
           child: Column(
             children: [
               sh(30),
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.screenWidth / 375 * 30),
-                child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Container(
-                          child: eventCard('Orientation', '10 JAN', context));
-                    }),
+              FutureBuilder(
+                future:
+                    _firestore.collection('events').doc('customEvents').get(),
+                builder: (context, snapshot) => Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.screenWidth / 375 * 30),
+                  child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: !snapshot.hasData
+                          ? 0
+                          : snapshot.data['events'].length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                            child: !snapshot.hasData
+                                ? Container()
+                                : eventCard(
+                                    context: context,
+                                    title: snapshot.data['events'][index]
+                                        ['name'],
+                                    organiser: snapshot.data['events'][index]
+                                        ['organiser'],
+                                    link: snapshot.data['events'][index]
+                                        ['registrationLink'],
+                                    date: snapshot.data['events'][index]
+                                        ['date'],
+                                    time: snapshot.data['events'][index]
+                                        ['time'],
+                                    description: snapshot.data['events'][index]
+                                        ['about'],
+                                    image: snapshot.data['events'][index]
+                                        ['coverImage']));
+                      }),
+                ),
               ),
             ],
           ),
@@ -69,7 +98,15 @@ class EventPage extends StatelessWidget {
     return SizedBox(height: SizeConfig.screenHeight * h / 812);
   }
 
-  Widget eventCard(String title, String date, BuildContext context) {
+  Widget eventCard(
+      {String title,
+      String date,
+      String time,
+      String organiser,
+      String description,
+      String image,
+      String link,
+      BuildContext context}) {
     SizeConfig().init(context);
     var b = SizeConfig.screenWidth / 375;
     var h = SizeConfig.screenHeight / 812;
@@ -110,8 +147,7 @@ class EventPage extends StatelessWidget {
                             width: double.infinity,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'),
+                                image: NetworkImage(image),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -128,7 +164,7 @@ class EventPage extends StatelessWidget {
                                 ),
                                 sh(10),
                                 Text(
-                                  'Orientation',
+                                  title,
                                   style: txtS(bc, 18, FontWeight.w700),
                                 ),
                                 SizedBox(height: h * 10),
@@ -137,7 +173,7 @@ class EventPage extends StatelessWidget {
                                   style: txtS(pc, 14, FontWeight.w400),
                                 ),
                                 Text(
-                                  '10 Jan 2020',
+                                  date,
                                   style: txtS(bc, 17, FontWeight.w700),
                                 ),
                                 sh(10),
@@ -146,7 +182,7 @@ class EventPage extends StatelessWidget {
                                   style: txtS(pc, 14, FontWeight.w400),
                                 ),
                                 Text(
-                                  '4 PM',
+                                  time,
                                   style: txtS(bc, 16, FontWeight.w700),
                                 ),
                                 sh(10),
@@ -155,12 +191,10 @@ class EventPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(b * 5),
                                   ),
                                   elevation: 5,
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AboutPage(),
-                                        ));
+                                  onPressed: () async {
+                                    await canLaunch(link)
+                                        ? await launch(link)
+                                        : throw 'Could not launch $link';
                                   },
                                   color: bc,
                                   textColor: Colors.white,
@@ -179,7 +213,7 @@ class EventPage extends StatelessWidget {
                                   height: h * 5,
                                 ),
                                 Text(
-                                  "Hey Freshers! Is your weekly schedule swarmed only with lectures and tests? Well, you know what they say - When the going gets tough,take a much deserved breather. Save the date fellas as wecommence our adventure through the amazing world of development. It's gonna be a long road ahead, but we promise it's not gonna be bumpy at all. So Ready.? Set... Dev!!",
+                                  description,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 6,
                                   style: txtS(bc, 13, FontWeight.w400),
@@ -207,8 +241,7 @@ class EventPage extends StatelessWidget {
                 ],
                 color: Colors.white,
                 image: DecorationImage(
-                  image: NetworkImage(
-                      'https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'),
+                  image: NetworkImage(image),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(b * 20),
@@ -249,11 +282,11 @@ class EventPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '10',
+                              date[0] + date[1],
                               style: txtS(bc, 18, FontWeight.w700),
                             ),
                             Text(
-                              'JAN',
+                              date[3] + date[4] + date[5],
                               style: txtS(bc, 17, FontWeight.w400),
                             )
                           ],
@@ -272,12 +305,12 @@ class EventPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Orientation',
+                              title,
                               style: txtS(Colors.white, 24, FontWeight.w700),
                             ),
                             sh(5),
                             Text(
-                              'DSC IIIT SURAT',
+                              organiser,
                               style: txtS(Colors.white, 14, FontWeight.w400),
                             ),
                           ],

@@ -43,11 +43,11 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.assignment),
-              title: Text('Assignment'),
+              title: Text('E-Commerce'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.new_releases),
-              title: Text('Bulletin'),
+              title: Text('Events'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),

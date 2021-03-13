@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:IIIT_Surat_Connect/Academics%20Resources/academicResources.dart';
 import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
 import 'package:IIIT_Surat_Connect/Utils/constants.dart';
-import 'package:IIIT_Surat_Connect/authScreens/login.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +10,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:toast/toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../drawer.dart';
 
@@ -245,11 +246,135 @@ class _ProfileState extends State<Profile> {
                                         onTap: () {
                                           setState(() {
                                             isPhone = !isPhone;
-                                          });
-                                        },
-                                        child: ediB(),
-                                      ),
-                                    ],
+                                            setState(() {});
+                                          })
+                                        : SizedBox(),
+                                  ],
+                                ),
+                                Spacer(),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isPhone = !isPhone;
+                                        });
+                                      },
+                                      child: ediB(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: b * 15, vertical: h * 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ico(Icons.engineering_outlined),
+                                SizedBox(width: b * 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Enrollment Number',
+                                      style: txtS(pc, 14, FontWeight.w500),
+                                    ),
+                                    sh(6),
+                                    Text(
+                                      (!snapshot.hasData ||
+                                              data['uiNumber'] == null)
+                                          ? ''
+                                          : data['uiNumber'].toUpperCase(),
+                                      style: txtS(bc, 16, FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: b * 15, vertical: h * 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ico(Icons.location_city_outlined),
+                                SizedBox(width: b * 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Department',
+                                      style: txtS(pc, 14, FontWeight.w500),
+                                    ),
+                                    sh(3),
+                                    Text(
+                                      (!snapshot.hasData ||
+                                              data['department'] == null)
+                                          ? ''
+                                          : (data['department'] == 'cs'
+                                              ? 'Computer Science'
+                                              : 'Electronics and Communication'),
+                                      style: txtS(bc, 15, FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: b * 15, vertical: h * 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ico(Icons.school_outlined),
+                                SizedBox(width: b * 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Semester',
+                                      style: txtS(pc, 14, FontWeight.w500),
+                                    ),
+                                    sh(3),
+                                    Text(
+                                      (!snapshot.hasData || data['sem'] == null)
+                                          ? ''
+                                          : data['sem'] + 'th',
+                                      style: txtS(bc, 16, FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          sh(30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: b * 25),
+                                  height: h * 60,
+                                  width: b * 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(b * 10),
+                                    border: Border.all(
+                                      color: pc,
+                                      width: b * 1,
+                                    ),
+
                                   ),
                                 ],
                               ),
@@ -283,36 +408,22 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 ],
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: b * 15, vertical: h * 10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ico(Icons.location_city_outlined),
-                                  SizedBox(width: b * 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'Department',
-                                        style: txtS(pc, 14, FontWeight.w500),
-                                      ),
-                                      sh(3),
-                                      Text(
-                                        (!snapshot.hasData ||
-                                                data['department'] == null)
-                                            ? ''
-                                            : (data['department'] == 'cs' ||
-                                                    data['department'] == 'co'
-                                                ? 'Computer Science'
-                                                : 'Electronics and Communication'),
-                                        style: txtS(bc, 15, FontWeight.w400),
-                                      ),
-                                    ],
+                              Spacer(),
+                              InkWell(
+                                onTap: () {
+                                  _auth.signOut();
+                                  Navigator.pop(context);
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: b * 25),
+                                  height: h * 60,
+                                  width: b * 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(b * 10),
+                                    color: bc,
+
                                   ),
                                 ],
                               ),
@@ -522,6 +633,26 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  pwdChangeRequest(String pwd, String newPwd) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    EmailAuthCredential credential = EmailAuthProvider.credential(
+        email: _auth.currentUser.email, password: pwd);
+
+    auth.currentUser.reauthenticateWithCredential(credential).catchError((e) {
+      print("Error is: $e");
+    }).then((value) {
+      auth.currentUser.updatePassword(newPwd).catchError((e) {
+        print(e);
+      }).timeout(Duration(seconds: 10), onTimeout: () {
+        Toast.show("Server Error", context, duration: Toast.LENGTH_LONG);
+      }).then((value) {
+        Toast.show("Password Changed Succesfully", context,
+            duration: Toast.LENGTH_LONG);
+      });
+    });
   }
 
   Icon ediB() {

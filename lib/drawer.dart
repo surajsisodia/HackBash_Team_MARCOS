@@ -6,15 +6,15 @@ import 'package:IIIT_Surat_Connect/buySell/eCommerce.dart';
 import 'package:IIIT_Surat_Connect/canteenMenu.dart';
 import 'package:IIIT_Surat_Connect/facultyContact.dart';
 import 'package:IIIT_Surat_Connect/mainMenu.dart';
+import 'package:IIIT_Surat_Connect/results/results.dart';
 import 'package:IIIT_Surat_Connect/timeTable.dart';
-
-import 'authScreens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Utils/SizeConfig.dart';
 import 'Utils/constants.dart';
+import 'authScreens/login.dart';
 
 class DrawerCode extends StatefulWidget {
   final String userName;
@@ -95,12 +95,11 @@ class _DrawerCodeState extends State<DrawerCode> {
         sh(5),
         row(Icons.home, "Home", Home()),
         row(Icons.assignment, "Assignments", Assignment()),
-        row(Icons.notification_important, "Bulletin", null),
-        Container(height: h * 0.15, color: bc),
         row(Icons.event, "Time-Table", TimeTable()),
+        Container(height: h * 0.15, color: bc),
         row(Icons.school, "Attendance", Attendance()),
         row(Icons.book, "Academic Resources", Academics()),
-        row(Icons.book_online, "Results", null),
+        row(Icons.book_online, "Results", Results()),
         Container(height: h * 0.15, color: bc),
         row(Icons.shopping_cart_rounded, "Buy/Sell", ECommerce()),
         row(Icons.contact_mail, "Admin Contact", FacultyContact()),
