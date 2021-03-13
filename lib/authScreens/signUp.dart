@@ -1,14 +1,10 @@
-import 'package:ay/authScreens/login.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:toast/toast.dart';
-import 'package:ay/Utils/SizeConfig.dart';
-import 'package:ay/Utils/constants.dart';
+import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
+import 'package:IIIT_Surat_Connect/Utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'login.dart';
 
 class SignUp extends StatefulWidget {
   _SignUpState createState() => _SignUpState();
