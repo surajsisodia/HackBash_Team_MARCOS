@@ -174,7 +174,7 @@ class _ECommerceState extends State<ECommerce> {
                             if (snapshot.hasData) {
                               return InkWell(
                                 onTap: () {
-                                  Navigator.of(context).pushReplacement(
+                                  Navigator.of(context).push(
                                       MaterialPageRoute(builder: (context) {
                                     return AboutProduct(
                                         snapshot.data.docs[index]['itemUID']);

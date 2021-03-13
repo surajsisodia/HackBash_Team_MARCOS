@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:IIIT_Surat_Connect/aboutUs.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Utils/SizeConfig.dart';
@@ -12,43 +17,48 @@ class AboutProduct extends StatefulWidget {
 }
 
 class _AboutProductState extends State<AboutProduct> {
-  SharedPreferences preferences;
-  String userName = "";
-  String userPhone = "";
-  String address = "";
-  String email = "";
-
-  loadData() async {
-    preferences = await SharedPreferences.getInstance();
-
-    setState(() {
-      userName = preferences.getString("currentUserName");
-      email = preferences.getString("currentUserEmail");
-
-      if (preferences.containsKey("currentUserPhone")) {
-        userPhone = preferences.getString("currentUserPhone");
-      } else {
-        userPhone = "Not Provided";
-      }
-    });
-  }
+  String cat = "old";
+  String title = "";
+  String des = "";
+  String price = "";
+  String sellerName = "";
+  String sellerPhone = "";
+  String sellerEmail = "";
+  List<String> imageItems = List<String>();
 
   @override
   void initState() {
     super.initState();
-
     loadData();
+  }
+
+  loadData() async {
+    FirebaseFirestore.instance
+        .collection('eCommerceProduct')
+        .where('itemUID', isEqualTo: widget.uid)
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        cat = event.docs[0].data()['itemCategry'];
+        title = event.docs[0].data()['itemTitle'];
+        des = event.docs[0].data()['itemDes'];
+        price = event.docs[0].data()['itemSell'];
+        sellerEmail = event.docs[0].data()['sellerEmail'];
+        sellerPhone = event.docs[0].data()['sellerContact'];
+
+        imageItems.add(event.docs[0].data()['image1']);
+        imageItems.add(event.docs[0].data()['image2']);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    loadData();
+    print(widget.uid);
     SizeConfig().init(context);
     var b = SizeConfig.screenWidth / 375;
     var h = SizeConfig.screenHeight / 812;
-    List imageItems = [
-      'Remember that the happiest people are not those getting more, but those giving more.',
-      'Since you get more joy out of giving joy to others, you should put a good deal of thought into the happiness that you are able to give.',
-    ];
 
     return SafeArea(
       child: Scaffold(
@@ -110,6 +120,10 @@ class _AboutProductState extends State<AboutProduct> {
                         color: bc,
                         borderRadius: BorderRadius.circular(b * 15),
                       ),
+                      child: CachedNetworkImage(
+                        imageUrl: i,
+                        fit: BoxFit.fill,
+                      ),
                     );
                   },
                 );
@@ -126,16 +140,16 @@ class _AboutProductState extends State<AboutProduct> {
                 children: [
                   sh(50),
                   Text(
-                    "Calculator",
+                    cat,
                     style: txtS(Colors.black, 12, FontWeight.w300),
                   ),
                   Text(
-                    "Casio 950X",
+                    title,
                     style: txtS(Colors.black, 20, FontWeight.w500),
                   ),
                   sh(5),
                   Text(
-                    "\u{20B9} 500",
+                    "\u{20B9} $price",
                     style: txtS(Color(0xff4cca1f), 20, FontWeight.w500),
                   ),
                   sh(15),
@@ -145,7 +159,7 @@ class _AboutProductState extends State<AboutProduct> {
                   ),
                   sh(7),
                   Text(
-                    "Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description ",
+                    des,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     style: txtS(Colors.black, 13, FontWeight.w400),
@@ -176,7 +190,7 @@ class _AboutProductState extends State<AboutProduct> {
                         Icon(Icons.call, color: bc, size: b * 18),
                         SizedBox(width: b * 10),
                         Text(
-                          "6387246025",
+                          sellerPhone,
                           style: txtS(Colors.black, 14, FontWeight.w400),
                         ),
                       ],
@@ -189,7 +203,7 @@ class _AboutProductState extends State<AboutProduct> {
                         Icon(Icons.mail, color: bc, size: b * 18),
                         SizedBox(width: b * 10),
                         Text(
-                          "ui19ec39@iiitsurat.ac.in",
+                          sellerEmail,
                           style: txtS(Colors.black, 14, FontWeight.w400),
                         ),
                       ],

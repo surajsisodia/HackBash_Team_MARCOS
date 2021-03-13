@@ -1,3 +1,4 @@
+import 'package:IIIT_Surat_Connect/Assignment/assignment.dart';
 import 'package:IIIT_Surat_Connect/Profile/profile.dart';
 import 'package:IIIT_Surat_Connect/bulletin/eventPage.dart';
 import 'package:IIIT_Surat_Connect/homePage.dart';
@@ -17,7 +18,7 @@ int _selectedIndex = 0;
 
 List<Widget> _widgetOptions = <Widget>[
   HomePage(),
-  ECommerce(),
+  Assignment(),
   EventPage(),
   Profile(),
 ];
