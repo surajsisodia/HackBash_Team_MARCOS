@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:IIIT_Surat_Connect/Academics%20Resources/academicResources.dart';
 import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
 import 'package:IIIT_Surat_Connect/Utils/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -23,7 +21,6 @@ class _ProfileState extends State<Profile> {
   String phone;
   bool isPhone = false;
   bool isName = false;
-  bool isPass = false;
   File imageFile;
   String imageName;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -244,76 +241,6 @@ class _ProfileState extends State<Profile> {
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
-                                horizontal: b * 17, vertical: h * 11),
-                            width: b * 335,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.lock_outlined,
-                                  color: bc,
-                                  size: b * 18,
-                                ),
-                                SizedBox(width: b * 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      isPass ? 'Change PassWord' : 'Password',
-                                      style: txtS(isPass ? bc : pc, 14,
-                                          FontWeight.w500),
-                                    ),
-                                    sh(3),
-                                    isPass
-                                        ? Column(children: [
-                                            Container(
-                                              width: b * 225,
-                                              child: TextField(
-                                                obscureText: true,
-                                                style: txtS(textColor, 15,
-                                                    FontWeight.w500),
-                                                decoration: dec('Old Password'),
-                                              ),
-                                            ),
-                                            sh(10),
-                                            Container(
-                                              width: b * 225,
-                                              child: TextField(
-                                                obscureText: true,
-                                                style: txtS(textColor, 15,
-                                                    FontWeight.w500),
-                                                decoration: dec('New Password'),
-                                              ),
-                                            ),
-                                          ])
-                                        : Text(
-                                            "**********",
-                                            style: txtS(
-                                                textColor, 16, FontWeight.w400),
-                                          ),
-                                    isPass ? butt(null) : SizedBox(),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isPass = !isPass;
-                                        });
-                                      },
-                                      child: ediB(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
                                 horizontal: b * 15, vertical: h * 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,40 +398,36 @@ class _ProfileState extends State<Profile> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        InkWell(
-                          onTap: () async {
-                            final pickedFile = await ImagePicker()
-                                .getImage(source: ImageSource.gallery);
-                            if (pickedFile != null) {
-                              imageFile = File(pickedFile.path);
-                              imageName = data['email'];
-                              uploadDisplayImageToFireStorage(
-                                      imageFile, imageName)
-                                  .then((value) {
-                                doc.reference.update({'photoUrl': value});
-                              });
-                            } else {
-                              return;
-                            }
-                          },
-                          child: CircleAvatar(
-                            radius: b * 138 / 2,
-                            backgroundColor: Colors.amber,
-                            child: CachedNetworkImage(
+                        Container(
+                          width: b * 138,
+                          height: h * 138,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  data['photoUrl']), // adding image from back
                               fit: BoxFit.cover,
-                              imageUrl: data['photoUrl'] == null
-                                  ? ''
-                                  : data['photoUrl'],
-                              fadeInDuration: Duration(microseconds: 0),
-                              fadeOutDuration: Duration(microseconds: 0),
-                              placeholder: (context, url) => Container(),
                             ),
                           ),
                         ),
                         Positioned(
                           right: 0,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              final pickedFile = await ImagePicker()
+                                  .getImage(source: ImageSource.gallery);
+                              if (pickedFile != null) {
+                                imageFile = File(pickedFile.path);
+                                imageName = data['email'];
+                                uploadDisplayImageToFireStorage(
+                                        imageFile, imageName)
+                                    .then((value) {
+                                  doc.reference.update({'photoUrl': value});
+                                });
+                              } else {
+                                return;
+                              }
+                            },
                             child: CircleAvatar(
                               backgroundColor: pc,
                               radius: SizeConfig.screenWidth * 20 / 375,
