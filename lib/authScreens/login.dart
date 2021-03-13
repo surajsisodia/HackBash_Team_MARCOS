@@ -1,3 +1,5 @@
+import 'package:IIIT_Surat_Connect/homePage.dart';
+import 'package:IIIT_Surat_Connect/mainMenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +8,9 @@ import '../Utils/constants.dart';
 import 'signUp.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:toast/toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
@@ -157,10 +162,7 @@ class _LoginState extends State<Login> {
                   sh(80),
                   MaterialButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => HomePage()),
-                      // );
+                      loginWithEmail();
                     },
                     color: pc,
                     shape: RoundedRectangleBorder(
@@ -241,5 +243,67 @@ class _LoginState extends State<Login> {
 
   SizedBox sh(double h) {
     return SizedBox(height: SizeConfig.screenHeight * h / 812);
+  }
+
+  loginWithEmail() async {
+    String email = emailTextController.text;
+    String pwd = pwdEditingController.text;
+    preferences = await SharedPreferences.getInstance();
+
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: pwd)
+          .then((credential) {
+        Toast.show("Login Succesfull", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        preferences.setBool('isLoggedIn', true);
+        getUserDataFromDb(credential.user.uid);
+        preferences.setString('currentUserUID', credential.user.uid);
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) {
+          return Home();
+        }), (route) => false);
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Toast.show("User not found", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      } else if (e.code == 'account-exists-with-different-credential') {
+        String email = e.email;
+
+        List<String> userSignInMethods =
+            await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+
+        print(userSignInMethods);
+      } else if (e.code == 'wrong-password') {
+        Toast.show("Wrong Password", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+      } else {
+        Toast.show("Failure, Kindly login after sometime", context,
+            duration: Toast.LENGTH_LONG);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getUserDataFromDb(String userUid) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    firestore.collection('users').doc(userUid).snapshots().listen((snapshot) {
+      preferences.setString('currentUserName', snapshot.data()['name']);
+      preferences.setString('currentUserEmail', snapshot.data()['email']);
+
+      if (snapshot.data()['phone'] != null)
+        preferences.setString('currentUserPhone', snapshot.data()['phone']);
+
+      preferences.setString('currentUserYear', snapshot.data()['year']);
+      preferences.setString('currentUserSem', snapshot.data()['sem']);
+      preferences.setString('currentUserDept', snapshot.data()['department']);
+      preferences.setString('currentUserPhotoUrl', snapshot.data()['photoUrl']);
+      preferences.setString('currentUserUID', snapshot.data()['uid']);
+      preferences.setString('currentUserUINumber', snapshot.data()['uiNumber']);
+    });
   }
 }

@@ -1,9 +1,13 @@
+import 'package:IIIT_Surat_Connect/models/currentStudentUser.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
 import 'package:IIIT_Surat_Connect/Utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toast/toast.dart';
 import 'login.dart';
 
 class SignUp extends StatefulWidget {
@@ -13,10 +17,11 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   bool isVisible = false;
   bool isVisible2 = false;
+  GlobalKey<ScaffoldState> _scaffold = GlobalKey<ScaffoldState>();
 
-  TextEditingController userTextController = TextEditingController();
-  TextEditingController pwdEditingController = TextEditingController();
-  TextEditingController pwdEditingController1 = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController pwdController = TextEditingController();
+  TextEditingController confirmPwdController = TextEditingController();
 
   SharedPreferences preferences;
 
@@ -31,6 +36,7 @@ class _SignUpState extends State<SignUp> {
       },
       child: SafeArea(
         child: Scaffold(
+          key: _scaffold,
           body: SingleChildScrollView(
             child: Container(
               child: Column(
@@ -79,7 +85,7 @@ class _SignUpState extends State<SignUp> {
                                   borderRadius: BorderRadius.circular(b * 100),
                                 ),
                                 child: TextField(
-                                  controller: userTextController,
+                                  controller: emailController,
                                   style: txtS(brc, 16, FontWeight.w400),
                                   decoration: dec('Your Email Id'),
                                 ),
@@ -100,7 +106,7 @@ class _SignUpState extends State<SignUp> {
                                   borderRadius: BorderRadius.circular(b * 100),
                                 ),
                                 child: TextField(
-                                  controller: pwdEditingController,
+                                  controller: pwdController,
                                   obscuringCharacter: '*',
                                   obscureText: !isVisible,
                                   style: txtS(brc, 16, FontWeight.w500),
@@ -150,7 +156,7 @@ class _SignUpState extends State<SignUp> {
                                   borderRadius: BorderRadius.circular(b * 100),
                                 ),
                                 child: TextField(
-                                  controller: pwdEditingController1,
+                                  controller: confirmPwdController,
                                   obscuringCharacter: '*',
                                   obscureText: !isVisible2,
                                   style: txtS(brc, 16, FontWeight.w500),
@@ -193,7 +199,14 @@ class _SignUpState extends State<SignUp> {
                   sh(100),
                   MaterialButton(
                     onPressed: () {
-                      print('Add Session');
+                      if (pwdController.text != confirmPwdController.text) {
+                        _scaffold.currentState.showSnackBar(SnackBar(
+                          content: Text("Password Mismatch"),
+                          backgroundColor: Colors.red,
+                        ));
+                      } else {
+                        signUpEmail();
+                      }
                     },
                     color: pc,
                     shape: RoundedRectangleBorder(
@@ -274,5 +287,120 @@ class _SignUpState extends State<SignUp> {
 
   SizedBox sh(double h) {
     return SizedBox(height: SizeConfig.screenHeight * h / 812);
+  }
+
+  signUpEmail() async {
+    String email = emailController.text;
+    String pwd = pwdController.text;
+
+    preferences = await SharedPreferences.getInstance();
+
+    print('Email: $email \nPassword: $pwd');
+
+    if (collegeEmailValidation(email)) {
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: pwd)
+            .then((credential) {
+          preferences.setBool('isLoggedIn', true);
+          Toast.show('Welcome ${credential.user.displayName}', context,
+              duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+          addUsertoDB(credential);
+        });
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          Toast.show('The account already exists for that email', context,
+              duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+        } else {
+          print(e);
+        }
+      } catch (e) {
+        print(e);
+      }
+
+      //preferences.setString('currentUserName', userName);
+      preferences.setString('currentUserEmail', email);
+    } else {
+      _scaffold.currentState.showSnackBar(SnackBar(
+        content: Text("Invalid Email Id"),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
+
+  addUsertoDB(UserCredential credential) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    String userName = credential.user.displayName;
+    String email = credential.user.email;
+    String uiNumber = email.substring(0, 8);
+    String startingYear = '20' + email.substring(2, 4);
+    int yearInt = DateTime.now().year - int.parse(startingYear);
+    String department = "";
+    DateTime now = DateTime.now();
+    String profilePicUrl = credential.user.photoURL;
+    String uid = credential.user.uid;
+    int semInt = 0;
+
+    if (now.month < 7) {
+      semInt = yearInt * 2;
+    } else {
+      semInt = yearInt * 2 + 1;
+    }
+
+    String sem = semInt.toString();
+    String year = yearInt.toString();
+
+    if (email.substring(4, 6) == 'ec')
+      department = 'ec';
+    else
+      department = 'cs';
+
+    CurrentStudentUser currentStudentUser = CurrentStudentUser(
+      name: userName,
+      email: email,
+      photoUrl: profilePicUrl,
+      department: department,
+      sem: sem,
+      year: year,
+      uid: uid,
+      uiNumber: uiNumber,
+    );
+
+    print(currentStudentUser);
+    Map<String, dynamic> map = currentStudentUser.toMap();
+
+    try {
+      firestore.collection('studentUsers').doc(uid).set(map).whenComplete(() {
+        print("User added to DB");
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  bool collegeEmailValidation(String email) {
+    for (int i = 0; i < email.length; i++) {
+      if (email[i] == '@') {
+        String domain = email.substring(i + 1, email.length);
+        print(domain);
+        if (email.substring(i + 1, email.length) != 'iiitsurat.ac.in') {
+          return false;
+        }
+      }
+    }
+
+    if (email.substring(0, 2) != 'ui') return false;
+
+    if (!(email.substring(2, 4) == '19' ||
+        email.substring(2, 4) == '20' ||
+        email.substring(2, 4) == '18' ||
+        email.substring(2, 4) == '17')) return false;
+
+    if (!(email.substring(4, 6) == 'ec' ||
+        email.substring(4, 6) == 'co' ||
+        email.substring(4, 6) == 'cs')) return false;
+
+    return true;
   }
 }
