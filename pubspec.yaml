@@ -23,10 +23,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cloud_firestore: any
   cupertino_icons: ^1.0.0
-  google_fonts: ^1.1.2
+  google_fonts: ^1.1.1
   shared_preferences: ^0.5.12+4
   material_design_icons_flutter:
+  firebase_auth: ^0.20.1
+  firebase_core: ^0.7.0
+  toast:
+  carousel_slider:
 
 dev_dependencies:
   flutter_test:
