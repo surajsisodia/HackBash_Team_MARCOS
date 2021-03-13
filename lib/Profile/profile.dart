@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:IIIT_Surat_Connect/Academics%20Resources/academicResources.dart';
 import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
 import 'package:IIIT_Surat_Connect/Utils/constants.dart';
-import 'package:IIIT_Surat_Connect/authScreens/login.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:toast/toast.dart';
 
 import '../drawer.dart';
 
@@ -334,13 +334,7 @@ class _ProfileState extends State<Profile> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Login()),
-                                  );
-                                },
+                                onTap: () {},
                                 child: Container(
                                   alignment: Alignment.center,
                                   padding:
@@ -364,11 +358,8 @@ class _ProfileState extends State<Profile> {
                               Spacer(),
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Academics(),
-                                      ));
+                                  _auth.signOut();
+                                  Navigator.pop(context);
                                 },
                                 child: Container(
                                   alignment: Alignment.center,
@@ -505,6 +496,26 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  pwdChangeRequest(String pwd, String newPwd) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    EmailAuthCredential credential = EmailAuthProvider.credential(
+        email: _auth.currentUser.email, password: pwd);
+
+    auth.currentUser.reauthenticateWithCredential(credential).catchError((e) {
+      print("Error is: $e");
+    }).then((value) {
+      auth.currentUser.updatePassword(newPwd).catchError((e) {
+        print(e);
+      }).timeout(Duration(seconds: 10), onTimeout: () {
+        Toast.show("Server Error", context, duration: Toast.LENGTH_LONG);
+      }).then((value) {
+        Toast.show("Password Changed Succesfully", context,
+            duration: Toast.LENGTH_LONG);
+      });
+    });
   }
 
   Icon ediB() {

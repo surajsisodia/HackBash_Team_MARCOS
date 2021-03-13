@@ -1,12 +1,14 @@
 import 'package:IIIT_Surat_Connect/buySell/productDetail.dart';
 import 'package:IIIT_Surat_Connect/buySell/sellPage.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../Utils/SizeConfig.dart';
 import '../Utils/constants.dart';
 import '../drawer.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class ECommerce extends StatefulWidget {
   _ECommerceState createState() => _ECommerceState();
@@ -72,19 +74,19 @@ class _ECommerceState extends State<ECommerce> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: bc,
+          centerTitle: true,
           leading: Builder(builder: (BuildContext context) {
             return InkWell(
               onTap: () {
-                Navigator.pop(context);
+                Scaffold.of(context).openDrawer();
               },
               child: Icon(
-                Icons.arrow_back_ios,
+                MdiIcons.sortVariant,
                 color: pc,
-                size: b * 18,
+                size: b * 24,
               ),
             );
           }),
-          centerTitle: true,
           title: Text(
             "E-Commerce",
             style: txtS(Colors.white, 20, FontWeight.w300),
@@ -316,7 +318,7 @@ class _ECommerceState extends State<ECommerce> {
         .orderBy('timestamp')
         .snapshots()
         .listen((snapshot) {
-      List<QueryDocumentSnapshot> documentSnapshot = snapshot.docs;
+      List<QueryDocumentSnapshot> documentSnapshot = snapshot?.docs;
 
       for (var i in documentSnapshot) {
         mainImageList.add(i.data()['image1']);
