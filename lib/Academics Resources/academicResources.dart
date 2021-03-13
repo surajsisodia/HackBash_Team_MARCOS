@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'Utils/SizeConfig.dart';
-import 'Utils/constants.dart';
+import '../Utils/SizeConfig.dart';
+import '../Utils/constants.dart';
 import 'content.dart';
 
 class Academics extends StatelessWidget {

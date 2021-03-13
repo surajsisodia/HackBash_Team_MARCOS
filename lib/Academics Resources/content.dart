@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'Utils/SizeConfig.dart';
-import 'Utils/constants.dart';
+import '../Utils/SizeConfig.dart';
+import '../Utils/constants.dart';
 
 class Content extends StatelessWidget {
   final String name;
