@@ -1,3 +1,5 @@
+import 'package:IIIT_Surat_Connect/Assignment/assignment.dart';
+
 import 'authScreens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -193,59 +195,67 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: b * 25, vertical: h * 15),
-                            width: b * 300,
-                            decoration: BoxDecoration(
-                              color: Color(0xffd8d1ea),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xff000000).withOpacity(0.25),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return Assignment();
+                              }));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: b * 25, vertical: h * 15),
+                              width: b * 300,
+                              decoration: BoxDecoration(
+                                color: Color(0xffd8d1ea),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(0xff000000).withOpacity(0.25),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(b * 25),
+                                  topLeft: Radius.circular(b * 40),
                                 ),
-                              ],
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(b * 25),
-                                topLeft: Radius.circular(b * 40),
                               ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Assignments",
-                                  style:
-                                      txtS(Colors.black, 20, FontWeight.w500),
-                                ),
-                                sh(10),
-                                Row(
-                                  children: [
-                                    Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Analog Circuits",
-                                            style: txtS(Colors.black, 16,
-                                                FontWeight.w400),
-                                          ),
-                                          sh(5),
-                                          Text(
-                                            "Due 23/07/2021",
-                                            style: txtS(Colors.black, 14,
-                                                FontWeight.w300),
-                                          ),
-                                        ]),
-                                    SizedBox(width: b * 20),
-                                    Icon(Icons.calendar_today_outlined,
-                                        size: b * 45),
-                                    Spacer(),
-                                    Icon(Icons.arrow_right_alt, size: b * 30)
-                                  ],
-                                ),
-                              ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Assignments",
+                                    style:
+                                        txtS(Colors.black, 20, FontWeight.w500),
+                                  ),
+                                  sh(10),
+                                  Row(
+                                    children: [
+                                      Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Analog Circuits",
+                                              style: txtS(Colors.black, 16,
+                                                  FontWeight.w400),
+                                            ),
+                                            sh(5),
+                                            Text(
+                                              "Due 23/07/2021",
+                                              style: txtS(Colors.black, 14,
+                                                  FontWeight.w300),
+                                            ),
+                                          ]),
+                                      SizedBox(width: b * 20),
+                                      Icon(Icons.calendar_today_outlined,
+                                          size: b * 45),
+                                      Spacer(),
+                                      Icon(Icons.arrow_right_alt, size: b * 30)
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -256,64 +266,71 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: b * 25, vertical: h * 15),
-                            width: b * 300,
-                            decoration: BoxDecoration(
-                              color: Color(0xffd8d1ea),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xff000000).withOpacity(0.25),
-                                  blurRadius: 4,
-                                  offset: Offset(0, 4),
+                          InkWell(
+                            onTap: () {
+                              // Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                              //   return
+                              // })
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: b * 25, vertical: h * 15),
+                              width: b * 300,
+                              decoration: BoxDecoration(
+                                color: Color(0xffd8d1ea),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color(0xff000000).withOpacity(0.25),
+                                    blurRadius: 4,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(b * 40),
+                                  topRight: Radius.circular(b * 25),
                                 ),
-                              ],
-                              borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(b * 40),
-                                topRight: Radius.circular(b * 25),
                               ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Bulletin Board",
-                                  style:
-                                      txtS(Colors.black, 20, FontWeight.w500),
-                                ),
-                                sh(10),
-                                Row(
-                                  children: [
-                                    Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Event Name",
-                                            style: txtS(Colors.black, 16,
-                                                FontWeight.w400),
-                                          ),
-                                          sh(5),
-                                          Text(
-                                            "23/07/2021  4:30 PM",
-                                            style: txtS(Colors.black, 14,
-                                                FontWeight.w300),
-                                          ),
-                                          sh(5),
-                                          Text(
-                                            "Place of Event",
-                                            style: txtS(Colors.black, 12,
-                                                FontWeight.w300),
-                                          ),
-                                        ]),
-                                    SizedBox(width: b * 20),
-                                    Icon(Icons.event, size: b * 50),
-                                    Spacer(),
-                                    Icon(Icons.arrow_right_alt, size: b * 30)
-                                  ],
-                                ),
-                              ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Bulletin Board",
+                                    style:
+                                        txtS(Colors.black, 20, FontWeight.w500),
+                                  ),
+                                  sh(10),
+                                  Row(
+                                    children: [
+                                      Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Event Name",
+                                              style: txtS(Colors.black, 16,
+                                                  FontWeight.w400),
+                                            ),
+                                            sh(5),
+                                            Text(
+                                              "23/07/2021  4:30 PM",
+                                              style: txtS(Colors.black, 14,
+                                                  FontWeight.w300),
+                                            ),
+                                            sh(5),
+                                            Text(
+                                              "Place of Event",
+                                              style: txtS(Colors.black, 12,
+                                                  FontWeight.w300),
+                                            ),
+                                          ]),
+                                      SizedBox(width: b * 20),
+                                      Icon(Icons.event, size: b * 50),
+                                      Spacer(),
+                                      Icon(Icons.arrow_right_alt, size: b * 30)
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

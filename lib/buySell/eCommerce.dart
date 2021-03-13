@@ -1,3 +1,4 @@
+import 'package:IIIT_Surat_Connect/buySell/productDetail.dart';
 import 'package:IIIT_Surat_Connect/buySell/sellPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -172,7 +173,13 @@ class _ECommerceState extends State<ECommerce> {
                           itemBuilder: (BuildContext context, int index) {
                             if (snapshot.hasData) {
                               return InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(builder: (context) {
+                                    return AboutProduct(
+                                        snapshot.data.docs[index]['itemUID']);
+                                  }));
+                                },
                                 child: Container(
                                   margin: EdgeInsets.symmetric(
                                       horizontal:

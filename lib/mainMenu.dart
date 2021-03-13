@@ -1,4 +1,5 @@
 import 'package:IIIT_Surat_Connect/Profile/profile.dart';
+import 'package:IIIT_Surat_Connect/bulletin/eventPage.dart';
 import 'package:IIIT_Surat_Connect/homePage.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ int _selectedIndex = 0;
 List<Widget> _widgetOptions = <Widget>[
   HomePage(),
   ECommerce(),
-  ECommerce(),
+  EventPage(),
   Profile(),
 ];
 

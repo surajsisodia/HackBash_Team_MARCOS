@@ -23,20 +23,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cached_network_image: ^2.5.1
   carousel_slider: ^3.0.0
   cloud_firestore: any
   cupertino_icons: ^1.0.0
   firebase_auth: ^0.20.1
   firebase_core: ^0.7.0
   firebase_storage: ^7.0.0
+  charts_flutter: ^0.9.0
+  flutter_slidable: ^0.5.7
   google_fonts: ^1.1.1
   image_picker: ^0.6.7+17
+  liquid_progress_indicator: null
   material_design_icons_flutter: null
   shared_preferences: ^0.5.12+4
-  url_launcher: ^5.7.10
-  flutter_slidable: ^0.5.7
-  cached_network_image: ^2.5.1
   toast: ^0.1.5
+  url_launcher: ^5.7.10
+  photo_view:
 
 dev_dependencies:
   flutter_test:

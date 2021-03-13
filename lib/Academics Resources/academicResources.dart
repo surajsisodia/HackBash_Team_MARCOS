@@ -104,7 +104,7 @@ class Academics extends StatelessWidget {
                               children: [
                                 sh(30),
                                 Image.asset('images/${index + 1}.png'),
-                                sh(20),
+                                sh(10),
                                 Text(
                                   subjectNames[index],
                                   style:
