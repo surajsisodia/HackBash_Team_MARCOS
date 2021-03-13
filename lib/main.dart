@@ -1,4 +1,4 @@
-import 'package:IIIT_Surat_Connect/facultyContact.dart';
+import 'package:IIIT_Surat_Connect/canteenMenu.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FacultyContact(),
+      home: Canteen(),
     );
   }
 }
