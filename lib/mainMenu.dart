@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:IIIT_Surat_Connect/Profile/profile.dart';
 import 'package:IIIT_Surat_Connect/homePage.dart';
+import 'package:flutter/material.dart';
+
 import 'Utils/constants.dart';
 import 'buySell/eCommerce.dart';
 
@@ -16,8 +18,7 @@ List<Widget> _widgetOptions = <Widget>[
   HomePage(),
   ECommerce(),
   ECommerce(),
-  //Profile(),
-  ECommerce()
+  Profile(),
 ];
 
 class _HomeState extends State<Home> {
