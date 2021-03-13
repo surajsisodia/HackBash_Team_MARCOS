@@ -1,6 +1,6 @@
-import 'package:IIIT_Surat_Connect/Utils/constants.dart';
+import 'Utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
+import 'Utils/SizeConfig.dart';
 
 class AboutPage extends StatelessWidget {
   @override
@@ -46,11 +46,17 @@ class AboutPage extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.only(top: h * 15),
-                height: h * 136,
-                width: b * 125,
+                padding: EdgeInsets.fromLTRB(b * 15, h * 15, b * 15, h * 15),
+                height: h * 150,
+                width: b * 130,
                 decoration: BoxDecoration(
-                  color: Colors.pink,
+                  color: bc,
                   borderRadius: BorderRadius.circular(b * 10),
+                ),
+                child: Image.asset(
+                  'images/co.png',
+                  height: h * 100,
+                  width: b * 100,
                 ),
               ),
               SizedBox(height: h * 50),
@@ -62,15 +68,15 @@ class AboutPage extends StatelessWidget {
                       Container(color: bc, height: h * 25, width: b * 4),
                       SizedBox(width: b * 5),
                       Text(
-                        'IIIT SURAT CONNECT',
-                        style: txtS(bc, 24, FontWeight.w400),
+                        'ConJoin',
+                        style: txtS(bc, 24, FontWeight.w500),
                       ),
                     ],
                   ),
-                  sh(10),
+                  sh(20),
                   Text(
-                    'Acha sa description. Acha sa description. Acha sa description. Acha sa description. Acha sa Acha sa description. Acha sa description. Acha sa Acha sa description. Acha sa description.Acha sa Acha sa description.Acha sa description.Acha sa Acha sa ',
-                    style: txtS(bc, 14, FontWeight.w400),
+                    'ConJoin is a cross platform mobile application that is super handy for a college student. The basic idea is that a student faces a lot of challenges in accomplishing various tasks of a college and the being updated with everything that\'s happening around is a Herculean task. The students can get access to almost everything they need in a college be it important notifications regarding any events, results, timetable, assignments or even getting any sort of academic resources they would ever want. The students can even sell old goods to the others who need. Well, tons of issues; and solution is just a tap.',
+                    style: txtS(bc, 15, FontWeight.w400),
                   ),
                 ],
               ),

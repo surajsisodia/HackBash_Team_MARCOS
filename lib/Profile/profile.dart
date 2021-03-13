@@ -23,6 +23,7 @@ class _ProfileState extends State<Profile> {
   String phone;
   bool isPhone = false;
   bool isName = false;
+  bool isPass = false;
   File imageFile;
   String imageName;
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -232,6 +233,76 @@ class _ProfileState extends State<Profile> {
                                       onTap: () {
                                         setState(() {
                                           isPhone = !isPhone;
+                                        });
+                                      },
+                                      child: ediB(),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: b * 17, vertical: h * 11),
+                            width: b * 335,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.lock_outlined,
+                                  color: bc,
+                                  size: b * 18,
+                                ),
+                                SizedBox(width: b * 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      isPass ? 'Change PassWord' : 'Password',
+                                      style: txtS(isPass ? bc : pc, 14,
+                                          FontWeight.w500),
+                                    ),
+                                    sh(3),
+                                    isPass
+                                        ? Column(children: [
+                                            Container(
+                                              width: b * 225,
+                                              child: TextField(
+                                                obscureText: true,
+                                                style: txtS(textColor, 15,
+                                                    FontWeight.w500),
+                                                decoration: dec('Old Password'),
+                                              ),
+                                            ),
+                                            sh(10),
+                                            Container(
+                                              width: b * 225,
+                                              child: TextField(
+                                                obscureText: true,
+                                                style: txtS(textColor, 15,
+                                                    FontWeight.w500),
+                                                decoration: dec('New Password'),
+                                              ),
+                                            ),
+                                          ])
+                                        : Text(
+                                            "**********",
+                                            style: txtS(
+                                                textColor, 16, FontWeight.w400),
+                                          ),
+                                    isPass ? butt(null) : SizedBox(),
+                                  ],
+                                ),
+                                Spacer(),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isPass = !isPass;
                                         });
                                       },
                                       child: ediB(),
