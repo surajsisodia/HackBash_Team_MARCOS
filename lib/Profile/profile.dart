@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:IIIT_Surat_Connect/Academics%20Resources/academicResources.dart';
 import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
 import 'package:IIIT_Surat_Connect/Utils/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -400,40 +398,36 @@ class _ProfileState extends State<Profile> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        InkWell(
-                          onTap: () async {
-                            final pickedFile = await ImagePicker()
-                                .getImage(source: ImageSource.gallery);
-                            if (pickedFile != null) {
-                              imageFile = File(pickedFile.path);
-                              imageName = data['email'];
-                              uploadDisplayImageToFireStorage(
-                                      imageFile, imageName)
-                                  .then((value) {
-                                doc.reference.update({'photoUrl': value});
-                              });
-                            } else {
-                              return;
-                            }
-                          },
-                          child: CircleAvatar(
-                            radius: b * 138 / 2,
-                            backgroundColor: Colors.amber,
-                            child: CachedNetworkImage(
+                        Container(
+                          width: b * 138,
+                          height: h * 138,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  data['photoUrl']), // adding image from back
                               fit: BoxFit.cover,
-                              imageUrl: data['photoUrl'] == null
-                                  ? ''
-                                  : data['photoUrl'],
-                              fadeInDuration: Duration(microseconds: 0),
-                              fadeOutDuration: Duration(microseconds: 0),
-                              placeholder: (context, url) => Container(),
                             ),
                           ),
                         ),
                         Positioned(
                           right: 0,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () async {
+                              final pickedFile = await ImagePicker()
+                                  .getImage(source: ImageSource.gallery);
+                              if (pickedFile != null) {
+                                imageFile = File(pickedFile.path);
+                                imageName = data['email'];
+                                uploadDisplayImageToFireStorage(
+                                        imageFile, imageName)
+                                    .then((value) {
+                                  doc.reference.update({'photoUrl': value});
+                                });
+                              } else {
+                                return;
+                              }
+                            },
                             child: CircleAvatar(
                               backgroundColor: pc,
                               radius: SizeConfig.screenWidth * 20 / 375,
