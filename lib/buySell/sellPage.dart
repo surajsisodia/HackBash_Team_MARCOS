@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:IIIT_Surat_Connect/buySell/dropDownMenu.dart';
 import 'package:IIIT_Surat_Connect/models/sellProduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -73,20 +74,7 @@ class _SellState extends State<Sell> {
                   style: txtS(bc, 16, FontWeight.w300),
                 ),
                 sh(5),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: b * 23),
-                  height: h * 35,
-                  width: 280 * b,
-                  decoration: BoxDecoration(
-                    color: Color(0xffd8d1ea),
-                    borderRadius: BorderRadius.circular(b * 10),
-                  ),
-                  child: TextField(
-                    controller: categoryController,
-                    style: txtS(brc, 14, FontWeight.w400),
-                    decoration: dec('Enter item title'),
-                  ),
-                ),
+                DropDownMenuBar(),
                 sh(20),
                 Text(
                   "Title",
@@ -347,7 +335,8 @@ class _SellState extends State<Sell> {
           sellerContact: phone,
           sellerEmail: email,
           image1Url: image1Url,
-          image2Url: image2Url);
+          image2Url: image2Url,
+          timestamp: timestamp);
 
       var map = product.toMap();
 

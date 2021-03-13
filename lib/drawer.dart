@@ -24,7 +24,10 @@ class _DrawerCodeState extends State<DrawerCode> {
     preferences = await SharedPreferences.getInstance();
 
     setState(() {
-      userName = preferences.getString("currentUserName");
+      if (preferences.getString('currentUserName') == null)
+        userName = preferences.getString('currentUserUiNumber').toUpperCase();
+      else
+        userName = preferences.getString("currentUserName");
       email = preferences.getString("currentUserEmail");
 
       if (preferences.containsKey("currentUserPhone")) {
