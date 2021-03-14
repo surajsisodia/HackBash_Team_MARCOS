@@ -343,8 +343,12 @@ class _SellState extends State<Sell> {
       await FirebaseFirestore.instance
           .collection('eCommerceProduct')
           .add(map)
-          .then((value) {
+          .then((value) async {
         String uid = value.id;
+        FirebaseFirestore.instance
+            .collection('eCommerceProduct')
+            .doc(uid)
+            .update({'itemUID': uid});
         Toast.show("Item Posted Successfuly", context,
             duration: Toast.LENGTH_LONG);
         Navigator.pop(context);
