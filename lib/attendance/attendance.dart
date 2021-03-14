@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
+
 import '../Utils/SizeConfig.dart';
 import '../Utils/constants.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
 class Attendance extends StatelessWidget {
   @override
@@ -9,6 +12,20 @@ class Attendance extends StatelessWidget {
     SizeConfig().init(context);
     var b = SizeConfig.screenWidth / 375;
     var h = SizeConfig.screenHeight / 812;
+
+    var xxx = [
+      20.0,
+      70.0,
+      76.0,
+      56.0,
+      67.0,
+      78.0,
+      86.6,
+      87.0,
+      78.0,
+      56.0,
+      36.0
+    ];
 
     return SafeArea(
       child: Scaffold(
@@ -97,7 +114,7 @@ class Attendance extends StatelessWidget {
                               SizedBox(
                                 width: 75,
                                 height: 75,
-                                child: liq(65.95),
+                                child: liq(xxx[index]),
                               ),
                             ],
                           ),
@@ -167,7 +184,7 @@ class Attendance extends StatelessWidget {
                 SizedBox(
                   width: b * 60,
                   height: h * 68,
-                  child: liq(65.95),
+                  child: liq(Random().nextInt(50) + 50.0),
                 ),
               ]),
             ),

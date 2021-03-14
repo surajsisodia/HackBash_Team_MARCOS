@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'Utils/SizeConfig.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:photo_view/photo_view.dart';
+
+import 'Utils/SizeConfig.dart';
 import 'Utils/constants.dart';
 
 class TimeTable extends StatelessWidget {
@@ -46,7 +47,7 @@ class TimeTable extends StatelessWidget {
           maxScale: PhotoViewComputedScale.covered * 2,
           //timeTable Link
           imageProvider: NetworkImage(
-              'https://images.unsplash.com/photo-1603993097397-89c963e325c7?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'),
+              'https://firebasestorage.googleapis.com/v0/b/deff-fe04d.appspot.com/o/1.PNG?alt=media&token=6529af9e-ca32-4f32-9a2c-4203a26dc0de'),
         ),
       ),
     );
