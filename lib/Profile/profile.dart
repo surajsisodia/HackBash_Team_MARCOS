@@ -398,18 +398,27 @@ class _ProfileState extends State<Profile> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        Container(
-                          width: b * 138,
-                          height: h * 138,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  data['photoUrl']), // adding image from back
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                        data['photoUrl'] == null
+                            ? Container(
+                                width: b * 138,
+                                height: h * 138,
+                                color: Colors.amber,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                ),
+                              )
+                            : Container(
+                                width: b * 138,
+                                height: h * 138,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: NetworkImage(data[
+                                        'photoUrl']), // adding image from back
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                         Positioned(
                           right: 0,
                           child: InkWell(
