@@ -33,4 +33,5 @@ Ritesh Shukla
 Raj Baindra
 
 
-![WhatsApp Image 2021-03-14 at 10 55 42 AM](https://user-images.githubusercontent.com/60230951/111058902-b2e27800-84b7-11eb-8ab9-7bed1306d528.jpeg)
+![WhatsApp Image 2021-03-14 at 11 20 31 AM (1)](https://user-images.githubusercontent.com/60230951/111058999-56cc2380-84b8-11eb-8feb-89e3d7568e55.jpeg)
+
