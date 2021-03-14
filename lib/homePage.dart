@@ -1,8 +1,7 @@
-import 'package:IIIT_Surat_Connect/Assignment/assignment.dart';
-
 import 'authScreens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Utils/SizeConfig.dart';
@@ -15,39 +14,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  SharedPreferences preferences;
-  String userName = "";
-  String userPhone = "";
-  String address = "";
-  String email = "";
-
-  loadData() async {
-    preferences = await SharedPreferences.getInstance();
-
-    setState(() {
-      userName = preferences.getString("currentUserName");
-      email = preferences.getString("currentUserEmail");
-
-      if (preferences.containsKey("currentUserPhone")) {
-        userPhone = preferences.getString("currentUserPhone");
-      } else {
-        userPhone = "Not Provided";
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    loadData();
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     var b = SizeConfig.screenWidth / 375;
     var h = SizeConfig.screenHeight / 812;
+    List images = [
+      'images/p1.jpg',
+      'images/p2.jpg',
+      'images/p3.jpg',
+      'images/p4.jpg',
+      'images/p5.jpg',
+      'images/p6.jpg'
+    ];
     List quoteItems = [
       'Remember that the happiest people are not those getting more, but those giving more.',
       'Since you get more joy out of giving joy to others, you should put a good deal of thought into the happiness that you are able to give.',
@@ -94,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                 height: h * 190,
                 autoPlay: true,
               ),
-              items: quoteItems.map((i) {
+              items: images.map((i) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Column(mainAxisSize: MainAxisSize.min, children: [
@@ -114,11 +93,10 @@ class _HomePageState extends State<HomePage> {
                               offset: Offset(0, 6),
                             ),
                           ],
-                        ),
-                        child: Text(
-                          '$i',
-                          textAlign: TextAlign.center,
-                          style: txtS(textColor, 14, FontWeight.w500),
+                          image: DecorationImage(
+                            image: AssetImage(i),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ]);
@@ -195,67 +173,59 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return Assignment();
-                              }));
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: b * 25, vertical: h * 15),
-                              width: b * 300,
-                              decoration: BoxDecoration(
-                                color: Color(0xffd8d1ea),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(0xff000000).withOpacity(0.25),
-                                    blurRadius: 4,
-                                    offset: Offset(0, 4),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(b * 25),
-                                  topLeft: Radius.circular(b * 40),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: b * 25, vertical: h * 15),
+                            width: b * 300,
+                            decoration: BoxDecoration(
+                              color: Color(0xffd8d1ea),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xff000000).withOpacity(0.25),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
                                 ),
+                              ],
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(b * 25),
+                                topLeft: Radius.circular(b * 40),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Assignments",
-                                    style:
-                                        txtS(Colors.black, 20, FontWeight.w500),
-                                  ),
-                                  sh(10),
-                                  Row(
-                                    children: [
-                                      Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Analog Circuits",
-                                              style: txtS(Colors.black, 16,
-                                                  FontWeight.w400),
-                                            ),
-                                            sh(5),
-                                            Text(
-                                              "Due 23/07/2021",
-                                              style: txtS(Colors.black, 14,
-                                                  FontWeight.w300),
-                                            ),
-                                          ]),
-                                      SizedBox(width: b * 20),
-                                      Icon(Icons.calendar_today_outlined,
-                                          size: b * 45),
-                                      Spacer(),
-                                      Icon(Icons.arrow_right_alt, size: b * 30)
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Assignments",
+                                  style:
+                                      txtS(Colors.black, 20, FontWeight.w500),
+                                ),
+                                sh(10),
+                                Row(
+                                  children: [
+                                    Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Analog Circuits",
+                                            style: txtS(Colors.black, 16,
+                                                FontWeight.w400),
+                                          ),
+                                          sh(5),
+                                          Text(
+                                            "Due 23/07/2021",
+                                            style: txtS(Colors.black, 14,
+                                                FontWeight.w300),
+                                          ),
+                                        ]),
+                                    SizedBox(width: b * 20),
+                                    Icon(Icons.calendar_today_outlined,
+                                        size: b * 45),
+                                    Spacer(),
+                                    Icon(Icons.arrow_right_alt, size: b * 30)
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -266,71 +236,64 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () {
-                              // Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                              //   return
-                              // })
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: b * 25, vertical: h * 15),
-                              width: b * 300,
-                              decoration: BoxDecoration(
-                                color: Color(0xffd8d1ea),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(0xff000000).withOpacity(0.25),
-                                    blurRadius: 4,
-                                    offset: Offset(0, 4),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(b * 40),
-                                  topRight: Radius.circular(b * 25),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: b * 25, vertical: h * 15),
+                            width: b * 300,
+                            decoration: BoxDecoration(
+                              color: Color(0xffd8d1ea),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xff000000).withOpacity(0.25),
+                                  blurRadius: 4,
+                                  offset: Offset(0, 4),
                                 ),
+                              ],
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(b * 40),
+                                topRight: Radius.circular(b * 25),
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Bulletin Board",
-                                    style:
-                                        txtS(Colors.black, 20, FontWeight.w500),
-                                  ),
-                                  sh(10),
-                                  Row(
-                                    children: [
-                                      Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Event Name",
-                                              style: txtS(Colors.black, 16,
-                                                  FontWeight.w400),
-                                            ),
-                                            sh(5),
-                                            Text(
-                                              "23/07/2021  4:30 PM",
-                                              style: txtS(Colors.black, 14,
-                                                  FontWeight.w300),
-                                            ),
-                                            sh(5),
-                                            Text(
-                                              "Place of Event",
-                                              style: txtS(Colors.black, 12,
-                                                  FontWeight.w300),
-                                            ),
-                                          ]),
-                                      SizedBox(width: b * 20),
-                                      Icon(Icons.event, size: b * 50),
-                                      Spacer(),
-                                      Icon(Icons.arrow_right_alt, size: b * 30)
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Bulletin Board",
+                                  style:
+                                      txtS(Colors.black, 20, FontWeight.w500),
+                                ),
+                                sh(10),
+                                Row(
+                                  children: [
+                                    Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Event Name",
+                                            style: txtS(Colors.black, 16,
+                                                FontWeight.w400),
+                                          ),
+                                          sh(5),
+                                          Text(
+                                            "23/07/2021  4:30 PM",
+                                            style: txtS(Colors.black, 14,
+                                                FontWeight.w300),
+                                          ),
+                                          sh(5),
+                                          Text(
+                                            "Place of Event",
+                                            style: txtS(Colors.black, 12,
+                                                FontWeight.w300),
+                                          ),
+                                        ]),
+                                    SizedBox(width: b * 20),
+                                    Icon(Icons.event, size: b * 50),
+                                    Spacer(),
+                                    Icon(Icons.arrow_right_alt, size: b * 30)
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -356,34 +319,5 @@ class _HomePageState extends State<HomePage> {
       fontWeight: wg,
       fontSize: SizeConfig.screenWidth * siz / 375,
     );
-  }
-
-  void logOut() async {
-    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-
-    try {
-      await firebaseAuth.signOut().then((value) {
-        preferences.setBool('isLoggedIn', false);
-        preferences.remove('currentUserName');
-        preferences.remove('currentUserPhone');
-        preferences.remove('currentUserEmail');
-        print("Signed Out");
-        Navigator.of(context).pop();
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) {
-            return Login();
-          }),
-          (route) => false,
-        );
-      }).catchError((e) {
-        print(e);
-      });
-    } on FirebaseAuthException catch (e) {
-      print(e);
-    } catch (e) {
-      print(e);
-    }
   }
 }

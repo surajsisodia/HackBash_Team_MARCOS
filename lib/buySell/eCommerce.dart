@@ -33,9 +33,11 @@ class _ECommerceState extends State<ECommerce> {
         .listen((snapshot) {
       List<QueryDocumentSnapshot> documentSnapshot = snapshot.docs;
 
-      for (var i in documentSnapshot) {
-        mainImageList.add(i.data()['image1']);
-      }
+      setState(() {
+        for (var i in documentSnapshot) {
+          mainImageList.add(i.data()['image1']);
+        }
+      });
     });
 
     return mainImageList;

@@ -344,6 +344,7 @@ class _SellState extends State<Sell> {
           .collection('eCommerceProduct')
           .add(map)
           .then((value) {
+        String uid = value.id;
         Toast.show("Item Posted Successfuly", context,
             duration: Toast.LENGTH_LONG);
         Navigator.pop(context);

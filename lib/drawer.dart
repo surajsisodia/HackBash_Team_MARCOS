@@ -27,34 +27,6 @@ class DrawerCode extends StatefulWidget {
 }
 
 class _DrawerCodeState extends State<DrawerCode> {
-  SharedPreferences preferences;
-  String userName = "";
-  String userPhone = "";
-  String address = "";
-  String email = "";
-
-  loadData() async {
-    preferences = await SharedPreferences.getInstance();
-
-    setState(() {
-      userName = preferences.getString("currentUserName");
-      email = preferences.getString("currentUserEmail");
-
-      if (preferences.containsKey("currentUserPhone")) {
-        userPhone = preferences.getString("currentUserPhone");
-      } else {
-        userPhone = "Not Provided";
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    loadData();
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

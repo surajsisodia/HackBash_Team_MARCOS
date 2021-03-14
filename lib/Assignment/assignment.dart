@@ -1,7 +1,9 @@
 import 'package:IIIT_Surat_Connect/Utils/SizeConfig.dart';
 import 'package:IIIT_Surat_Connect/Utils/constants.dart';
+import 'package:IIIT_Surat_Connect/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class Assignment extends StatefulWidget {
   Assignment({Key key}) : super(key: key);
@@ -47,6 +49,7 @@ class _AssignmentState extends State<Assignment> {
     var b = SizeConfig.screenWidth / 375;
     var h = SizeConfig.screenHeight / 812;
     return Scaffold(
+      drawer: DrawerCode(),
       backgroundColor: bc,
       appBar: AppBar(
         elevation: 0,
@@ -59,12 +62,12 @@ class _AssignmentState extends State<Assignment> {
         leading: Builder(builder: (BuildContext context) {
           return InkWell(
             onTap: () {
-              Navigator.pop(context);
+              Scaffold.of(context).openDrawer();
             },
             child: Icon(
-              Icons.arrow_back_ios,
+              MdiIcons.sortVariant,
               color: pc,
-              size: b * 18,
+              size: b * 24,
             ),
           );
         }),

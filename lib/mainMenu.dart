@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.assignment),
-              title: Text('E-Commerce'),
+              title: Text('Assignment'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.new_releases),
