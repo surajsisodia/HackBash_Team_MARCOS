@@ -5,7 +5,6 @@ import 'package:IIIT_Surat_Connect/homePage.dart';
 import 'package:flutter/material.dart';
 
 import 'Utils/constants.dart';
-import 'buySell/eCommerce.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -43,7 +42,7 @@ class _HomeState extends State<Home> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.assignment),
-              title: Text('Assignment'),
+              title: Text('Assignments'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.new_releases),

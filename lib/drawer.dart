@@ -8,6 +8,7 @@ import 'package:IIIT_Surat_Connect/facultyContact.dart';
 import 'package:IIIT_Surat_Connect/mainMenu.dart';
 import 'package:IIIT_Surat_Connect/results/results.dart';
 import 'package:IIIT_Surat_Connect/timeTable.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,9 @@ class DrawerCode extends StatefulWidget {
 }
 
 class _DrawerCodeState extends State<DrawerCode> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -44,24 +48,42 @@ class _DrawerCodeState extends State<DrawerCode> {
               bottomRight: Radius.circular(b * 30),
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                backgroundColor: pc,
-                radius: b * 78 / 2,
-              ),
-              sh(8),
-              Text(
-                "Ritesh Shukla",
-                style: txtS(Colors.white, 16, FontWeight.w300),
-              ),
-              sh(4),
-              Text(
-                "ui19ec39@iiitsurat.ac.in",
-                style: txtS(Colors.white, 14, FontWeight.w200),
-              ),
-            ],
+          child: StreamBuilder(
+            stream: _firestore
+                .collection('studentUsers')
+                .where('email', isEqualTo: _auth.currentUser.email)
+                .snapshots(),
+            builder: (context, snapshot) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                !snapshot.hasData
+                    ? Container()
+                    : Container(
+                        width: b * 80,
+                        height: h * 80,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(snapshot.data.docs[0]
+                                .data()['photoUrl']), // adding image from back
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                sh(8),
+                Text(
+                  !snapshot.hasData ? '' : snapshot.data.docs[0].data()['name'],
+                  style: txtS(Colors.white, 16, FontWeight.w300),
+                ),
+                sh(4),
+                Text(
+                  !snapshot.hasData
+                      ? ''
+                      : snapshot.data.docs[0].data()['email'],
+                  style: txtS(Colors.white, 14, FontWeight.w200),
+                ),
+              ],
+            ),
           ),
         ),
         sh(5),
