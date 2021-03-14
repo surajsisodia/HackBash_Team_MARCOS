@@ -1,11 +1,9 @@
-import 'authScreens/login.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:IIIT_Surat_Connect/Assignment/assignment.dart';
 import 'package:flutter/material.dart';
-
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'Utils/SizeConfig.dart';
 import 'Utils/constants.dart';
+import 'bulletin/eventPage.dart';
 import 'drawer.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -26,16 +24,6 @@ class _HomePageState extends State<HomePage> {
       'images/p4.jpg',
       'images/p5.jpg',
       'images/p6.jpg'
-    ];
-    List quoteItems = [
-      'Remember that the happiest people are not those getting more, but those giving more.',
-      'Since you get more joy out of giving joy to others, you should put a good deal of thought into the happiness that you are able to give.',
-      'We must give more in order to get more. It is the generous giving of ourselves that produces the generous harvest.',
-      'We make a living by what we get. We make a life by what we give.',
-      'No one is useless in this world who lightens the burdens of another.',
-      'It is every man’s obligation to put back into the world at least the equivalent of what he takes out of it.',
-      'The meaning of life is to find your gift. The purpose of life is to give it away.',
-      'I have found that among its other benefits, giving liberates the soul of the giver.'
     ];
 
     return SafeArea(
@@ -169,7 +157,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                     sh(40),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return Assignment();
+                        }));
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -233,6 +226,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                     sh(40),
                     InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return EventPage();
+                        }));
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
