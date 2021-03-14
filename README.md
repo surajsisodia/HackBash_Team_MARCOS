@@ -31,7 +31,7 @@ Suraj Sisodia
 
 
 
-https://user-images.githubusercontent.com/60230951/111058829-259f2380-84b7-11eb-8936-f87fe530a098.jpeg
+
 
 Prakash Kumar
 
